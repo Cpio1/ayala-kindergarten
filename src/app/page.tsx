@@ -8,14 +8,14 @@ import { Documents } from "@/components/sections/Documents";
 import { Groups } from "@/components/sections/Groups";
 import { Hero } from "@/components/sections/Hero";
 import { Nutrition } from "@/components/sections/Nutrition";
-import { getGalleryImages, getSpecialImage } from "@/lib/images";
+import { getGalleryImages, getSpecialImage, getSpecialVideo } from "@/lib/images";
 
 export default function HomePage() {
   return (
     <SiteShell>
       <Hero image={getSpecialImage("main-page")} />
       <Advantages />
-      <AboutSection image={getSpecialImage("main-page2")} />
+      <AboutSection video={getSpecialVideo("main-page2")} image={getSpecialImage("main-page2")} />
       <Groups />
       <Classes />
       <Nutrition />

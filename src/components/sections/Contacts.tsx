@@ -1,19 +1,17 @@
 "use client";
 
 import { Building2, Clock3, MapPin, Phone } from "lucide-react";
-import { ContactForm } from "./ContactForm";
+import { TwoGisMap } from "./TwoGisMap";
 import { InstagramIcon, WhatsappIcon } from "../BrandIcons";
 import { Reveal } from "../Reveal";
 import { SectionHeading } from "../SectionHeading";
-import { Cloud, Star, Sun } from "../decor/Decor";
-import { mapEmbedUrl, mapLinks, site, whatsappLink } from "@/config/site";
+import { Cloud, Sun } from "../decor/Decor";
+import { site, whatsappLink } from "@/config/site";
 import { useLanguage } from "@/i18n/LanguageProvider";
 
 export function Contacts() {
   const { t, lang } = useLanguage();
   const c = t.contacts;
-  const map = mapEmbedUrl(lang);
-  const links = mapLinks();
 
   const rows = [
     {
@@ -70,7 +68,7 @@ export function Contacts() {
       <div className="container-page relative">
         <SectionHeading id="contacts-title" eyebrow={c.eyebrow} title={c.title} subtitle={c.subtitle} />
 
-        <div className="mt-12 grid gap-6 lg:mt-14 lg:grid-cols-[0.95fr_1.05fr] lg:gap-8">
+        <div className="mt-12 grid gap-6 lg:mt-14 lg:grid-cols-[0.85fr_1.15fr] lg:items-start lg:gap-10">
           <Reveal className="flex flex-col gap-5">
             <ul className="rounded-[2.25rem_2.25rem_2.25rem_0.8rem] bg-white p-3 shadow-soft sm:p-4">
               {rows.map((row, i) => (
@@ -89,7 +87,7 @@ export function Contacts() {
               ))}
             </ul>
 
-            <div className="grid gap-3 sm:grid-cols-3">
+            <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-2 lg:[&>*:first-child]:col-span-2">
               <a
                 href={whatsappLink()}
                 target="_blank"
@@ -110,36 +108,10 @@ export function Contacts() {
                 {t.common.call}
               </a>
             </div>
-
-            {map && links && (
-              <div className="overflow-hidden rounded-[2rem] bg-white shadow-soft">
-                <iframe
-                  title={c.mapTitle}
-                  src={map}
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  className="block h-64 w-full border-0"
-                />
-                <div className="flex gap-2 p-3">
-                  <a href={links.google} target="_blank" rel="noopener noreferrer" className="btn btn-ghost flex-1 !min-h-10 !text-sm">
-                    {c.openGoogle}
-                  </a>
-                  <a href={links.twoGis} target="_blank" rel="noopener noreferrer" className="btn btn-ghost flex-1 !min-h-10 !text-sm">
-                    {c.open2gis}
-                  </a>
-                </div>
-              </div>
-            )}
           </Reveal>
 
-          <Reveal delay={0.1}>
-            <div className="relative rounded-[0.8rem_2.5rem_2.5rem_2.5rem] bg-white p-6 shadow-lift sm:p-8">
-              <Star className="absolute -top-3 right-10 h-7 w-7 animate-twinkle text-sun-dark" />
-              <h3 className="text-xl font-semibold text-ink sm:text-2xl">{c.form.title}</h3>
-              <div className="mt-5">
-                <ContactForm />
-              </div>
-            </div>
+          <Reveal delay={0.1} className="pt-6 lg:pt-0">
+            <TwoGisMap />
           </Reveal>
         </div>
       </div>

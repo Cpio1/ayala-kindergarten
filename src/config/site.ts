@@ -35,18 +35,24 @@ export const site = {
     url: "https://www.instagram.com/ayala_detsad",
   },
 
-  /**
-   * The address is NOT provided yet. When it is, fill it in, e.g.
-   * { kk: "Астана қаласы, ... көшесі, 1", ru: "город Астана, улица ..., 1" }
-   * — it appears in Contacts, the footer and the structured data automatically.
-   */
-  address: null as Localized | null,
+  /** Confirmed by the kindergarten's 2GIS card (same phone and Instagram). */
+  address: {
+    kk: "Алматы қ., Алгабас шағынауданы, Қазтуған жырау көшесі, 21",
+    ru: "г. Алматы, мкр. Алгабас, ул. Казтуган жырау, 21",
+  } as Localized | null,
+
+  /** Map point taken from the same 2GIS card. Set to null to hide the map. */
+  coordinates: { lat: 43.248956, lng: 76.812385 } as { lat: number; lng: number } | null,
 
   /**
-   * Map point. Leave null until the exact location is confirmed — no map is shown.
-   * Example: { lat: 51.1282, lng: 71.4304 }
+   * 2GIS organization card: https://2gis.kz/almaty/firm/70000001033758486
+   * («Аяла, частный детский сад», +7 707 322 00 07, @ayala_detsad).
+   * If the card changes, replace firmId — the map widget and route button follow it.
    */
-  coordinates: null as { lat: number; lng: number } | null,
+  twoGis: {
+    city: "almaty",
+    firmId: "70000001033758486" as string | null,
+  },
 
   hours: {
     opens: "07:10",
@@ -76,17 +82,29 @@ export function whatsappLink(text?: string) {
   return `https://wa.me/${site.whatsapp}${text ? `?text=${encodeURIComponent(text)}` : ""}`;
 }
 
-export function mapEmbedUrl(lang: "kk" | "ru") {
+/** Official 2GIS «firms on map» widget (the iframe its DGWidgetLoader.js renders). */
+export function twoGisWidgetUrl() {
+  const { firmId, city } = site.twoGis;
   const c = site.coordinates;
-  if (!c) return null;
-  return `https://www.google.com/maps?q=${c.lat},${c.lng}&hl=${lang}&z=16&output=embed`;
+  if (!firmId || !c) return null;
+  const options = { pos: { lat: c.lat, lon: c.lng, zoom: 16 }, opt: { city }, org: firmId };
+  return `https://widgets.2gis.com/widget?type=firmsonmap&options=${encodeURIComponent(JSON.stringify(options))}`;
 }
 
-export function mapLinks() {
+function twoGisBase(lang: "kk" | "ru") {
+  return `https://2gis.kz${lang === "kk" ? "/kk" : ""}/${site.twoGis.city}`;
+}
+
+/** The organization card in 2GIS. */
+export function twoGisFirmUrl(lang: "kk" | "ru") {
+  const { firmId } = site.twoGis;
+  return firmId ? `${twoGisBase(lang)}/firm/${firmId}` : null;
+}
+
+/** 2GIS directions with the kindergarten as the destination (start point is chosen by the user). */
+export function twoGisRouteUrl(lang: "kk" | "ru") {
+  const { firmId } = site.twoGis;
   const c = site.coordinates;
-  if (!c) return null;
-  return {
-    google: `https://www.google.com/maps/search/?api=1&query=${c.lat},${c.lng}`,
-    twoGis: `https://2gis.kz/geo/${c.lng},${c.lat}`,
-  };
+  if (!firmId || !c) return twoGisFirmUrl(lang);
+  return `${twoGisBase(lang)}/directions/points/${encodeURIComponent(`|${c.lng},${c.lat};${firmId}`)}`;
 }

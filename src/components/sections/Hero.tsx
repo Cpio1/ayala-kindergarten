@@ -28,7 +28,7 @@ export function Hero({ image }: { image: SiteImage | null }) {
         <Star className="absolute top-[42%] left-[46%] hidden h-5 w-5 animate-twinkle text-sun-dark lg:block" />
       </div>
 
-      <div className="container-page grid items-center gap-12 lg:grid-cols-[1.05fr_1fr] lg:gap-10">
+      <div className="container-page grid items-center gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:gap-10">
         {/* Text */}
         <div className="relative z-10 text-center lg:text-left">
           <motion.span variants={fadeUp} initial="hidden" animate="show" custom={0} className="eyebrow">
@@ -114,13 +114,16 @@ export function Hero({ image }: { image: SiteImage | null }) {
           </motion.ul>
         </div>
 
-        {/* Photo composition */}
-        <div className="relative mx-auto w-full max-w-[25rem] sm:max-w-[30rem] lg:max-w-none">
-          <div className="relative mx-auto aspect-square w-[86%]">
-            {/* yellow backing blob */}
+        {/* Photo composition — the frame keeps the photo's own proportions */}
+        <div className="relative mx-auto w-full max-w-[34rem] px-3 pt-8 pb-12 sm:px-6 lg:max-w-none lg:px-4">
+          <div
+            className="relative mx-auto w-full"
+            style={{ aspectRatio: image ? `${image.width} / ${image.height}` : "1 / 1" }}
+          >
+            {/* yellow backing shape */}
             <motion.div
               aria-hidden="true"
-              className="absolute inset-0 translate-x-[7%] translate-y-[5%] bg-sun"
+              className="absolute inset-0 translate-x-[4%] translate-y-[7%] bg-sun"
               style={{ borderRadius: "var(--radius-blob-2)" }}
               initial={{ opacity: 0, scale: 0.85 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -130,9 +133,20 @@ export function Hero({ image }: { image: SiteImage | null }) {
             <svg
               aria-hidden="true"
               viewBox="0 0 100 100"
-              className="absolute -inset-[7%] h-[114%] w-[114%] animate-spin-slow text-brand/25"
+              preserveAspectRatio="none"
+              className="absolute -inset-[6%] h-[112%] w-[112%] text-brand/25"
             >
-              <circle cx="50" cy="50" r="48" fill="none" stroke="currentColor" strokeWidth="0.5" strokeDasharray="2 3" />
+              <ellipse
+                cx="50"
+                cy="50"
+                rx="49"
+                ry="48"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.2"
+                strokeDasharray="3 5"
+                vectorEffect="non-scaling-stroke"
+              />
             </svg>
 
             <motion.div
@@ -146,29 +160,29 @@ export function Hero({ image }: { image: SiteImage | null }) {
                 alt={h.photoAlt}
                 priority
                 morph
-                sizes="(min-width: 1024px) 40vw, (min-width: 640px) 26rem, 86vw"
+                shape="natural"
+                sizes="(min-width: 1280px) 36rem, (min-width: 1024px) 45vw, (min-width: 640px) 32rem, 94vw"
                 className="relative h-full w-full"
               />
             </motion.div>
 
-            {/* decorations */}
-            <Sun className="absolute -top-[12%] -right-[10%] w-[30%] drop-shadow-[0_10px_20px_rgba(242,183,5,0.35)]" />
-            <Cloud className="absolute top-[14%] -left-[16%] w-[30%] animate-float-slow text-white drop-shadow-[0_8px_16px_rgba(32,116,237,0.15)]" />
-            <Cloud className="absolute -right-[12%] bottom-[30%] w-[20%] animate-float text-white drop-shadow-[0_8px_16px_rgba(32,116,237,0.15)]" />
-            <Star className="absolute top-[2%] left-[10%] h-6 w-6 animate-twinkle text-brand" />
-            <Star className="absolute -bottom-[2%] left-[42%] h-4 w-4 animate-twinkle text-sun-dark [animation-delay:1.2s]" />
-            <Star className="absolute top-[46%] -right-[6%] h-5 w-5 animate-twinkle text-sky [animation-delay:0.6s]" />
-            <Squiggle className="absolute -bottom-[6%] -left-[4%] w-[34%] text-brand" />
-            <Dots className="absolute -top-[4%] left-[30%] w-[14%] text-sky" />
-            <span aria-hidden="true" className="absolute bottom-[12%] -left-[9%] h-5 w-5 animate-float rounded-full bg-brand" />
-            <span aria-hidden="true" className="absolute top-[30%] -right-[3%] h-3 w-3 animate-float-slow rounded-full bg-sun-dark" />
+            {/* decorations stay on the frame's edges, away from faces */}
+            <Sun className="absolute -top-[22%] -right-[7%] w-[22%] drop-shadow-[0_10px_20px_rgba(242,183,5,0.35)]" />
+            <Cloud className="absolute -top-[10%] -left-[9%] w-[20%] animate-float-slow text-white drop-shadow-[0_8px_16px_rgba(32,116,237,0.15)]" />
+            <Cloud className="absolute -right-[7%] bottom-[18%] w-[13%] animate-float text-white drop-shadow-[0_8px_16px_rgba(32,116,237,0.15)]" />
+            <Star className="absolute -top-[14%] left-[30%] h-5 w-5 animate-twinkle text-brand" />
+            <Star className="absolute -bottom-[16%] left-[44%] h-4 w-4 animate-twinkle text-sun-dark [animation-delay:1.2s]" />
+            <Star className="absolute top-[40%] -right-[5%] h-4 w-4 animate-twinkle text-sky [animation-delay:0.6s]" />
+            <Squiggle className="absolute -bottom-[17%] left-[2%] w-[24%] text-brand" />
+            <Dots className="absolute -top-[18%] left-[48%] w-[10%] text-sky" />
+            <span aria-hidden="true" className="absolute bottom-[22%] -left-[5%] h-4 w-4 animate-float rounded-full bg-brand" />
 
-            {/* fact badges */}
+            {/* fact badges sit outside the photo so no child is covered */}
             <motion.div
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8, duration: 0.6, ease }}
-              className="absolute -bottom-[6%] right-[-4%] flex items-center gap-2.5 rounded-2xl bg-white px-3 py-2.5 shadow-soft sm:right-[-8%] sm:px-4"
+              className="absolute right-[2%] -bottom-[11%] flex translate-y-1/2 items-center gap-2.5 rounded-2xl bg-white px-3 py-2.5 shadow-soft sm:px-4"
             >
               <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-brand text-white">
                 <Clock3 className="h-5 w-5" aria-hidden="true" />
@@ -182,7 +196,7 @@ export function Hero({ image }: { image: SiteImage | null }) {
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.95, duration: 0.6, ease }}
-              className="absolute top-[56%] -left-[10%] hidden items-center gap-2.5 rounded-2xl bg-white px-4 py-2.5 shadow-soft sm:flex"
+              className="absolute -top-[4%] left-[6%] hidden -translate-y-full items-center gap-2.5 rounded-2xl bg-white px-4 py-2.5 shadow-soft sm:flex"
             >
               <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-sun text-ink">
                 <Soup className="h-5 w-5" aria-hidden="true" />

@@ -2,12 +2,11 @@
 
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { OrganicPhoto } from "../OrganicPhoto";
+import { AboutMedia } from "./AboutMedia";
 import { Reveal } from "../Reveal";
 import { SectionHeading } from "../SectionHeading";
-import { Cloud, Star, Sun } from "../decor/Decor";
 import { useLanguage } from "@/i18n/LanguageProvider";
-import type { SiteImage } from "@/lib/images";
+import type { SiteImage, SiteVideo } from "@/lib/images";
 import { cn } from "@/lib/cn";
 
 export function AboutStats({ className }: { className?: string }) {
@@ -30,7 +29,7 @@ export function AboutStats({ className }: { className?: string }) {
   );
 }
 
-export function AboutSection({ image }: { image: SiteImage | null }) {
+export function AboutSection({ video, image }: { video: SiteVideo | null; image: SiteImage | null }) {
   const { t } = useLanguage();
   const a = t.about;
 
@@ -38,24 +37,8 @@ export function AboutSection({ image }: { image: SiteImage | null }) {
     <section id="about" aria-labelledby="about-title" className="relative py-16 sm:py-24">
       <div className="container-page">
         <div className="grid items-center gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
-          <Reveal className="relative mx-auto w-full max-w-[26rem] lg:max-w-none">
-            <div className="relative mx-auto aspect-[4/5] w-[86%]">
-              <div
-                aria-hidden="true"
-                className="absolute inset-0 -translate-x-[6%] translate-y-[5%] bg-sky"
-                style={{ borderRadius: "var(--radius-blob-1)" }}
-              />
-              <OrganicPhoto
-                image={image}
-                alt={a.photoAlt}
-                sizes="(min-width: 1024px) 36vw, (min-width: 640px) 22rem, 80vw"
-                className="absolute inset-0"
-              />
-              <Sun className="absolute -bottom-[7%] -right-[8%] w-[28%]" />
-              <Cloud className="absolute top-[8%] -right-[14%] w-[30%] animate-float-slow text-white drop-shadow-[0_8px_16px_rgba(32,116,237,0.15)]" />
-              <Star className="absolute top-[-3%] left-[6%] h-6 w-6 animate-twinkle text-sun-dark" />
-              <Star className="absolute bottom-[18%] -left-[8%] h-4 w-4 animate-twinkle text-brand [animation-delay:1s]" />
-            </div>
+          <Reveal>
+            <AboutMedia video={video} image={image} alt={a.photoAlt} backing="bg-sky" />
           </Reveal>
 
           <div>

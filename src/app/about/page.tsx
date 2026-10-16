@@ -5,7 +5,7 @@ import { Advantages } from "@/components/sections/Advantages";
 import { Nutrition } from "@/components/sections/Nutrition";
 import { site } from "@/config/site";
 import { dictionaries } from "@/i18n/translations";
-import { getSpecialImage } from "@/lib/images";
+import { getSpecialImage, getSpecialVideo } from "@/lib/images";
 
 const kk = dictionaries.kk;
 
@@ -30,7 +30,7 @@ export function generateMetadata(): Metadata {
 export default function AboutPage() {
   return (
     <SiteShell>
-      <AboutHero image={getSpecialImage("main-page2")} />
+      <AboutHero video={getSpecialVideo("main-page2")} image={getSpecialImage("main-page2")} />
       <AboutValues />
       <Advantages />
       <Nutrition />

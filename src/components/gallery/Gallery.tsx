@@ -34,10 +34,15 @@ export function Gallery({ images }: { images: SiteImage[] }) {
             <motion.div
               key={image.src}
               layout="position"
-              initial={index >= INITIAL ? { opacity: 0, y: 30, scale: 0.97 } : false}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
+              initial={{ opacity: 0, y: 30, scale: 0.97 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true, amount: 0.15 }}
               exit={{ opacity: 0, scale: 0.97 }}
-              transition={{ duration: 0.5, delay: index >= INITIAL ? (index - INITIAL) * 0.05 : 0, ease: [0.22, 1, 0.36, 1] }}
+              transition={{
+                duration: 0.6,
+                delay: index >= INITIAL ? (index - INITIAL) * 0.05 : (index % 3) * 0.08,
+                ease: [0.22, 1, 0.36, 1],
+              }}
             >
               <button
                 type="button"

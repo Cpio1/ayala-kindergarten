@@ -18,7 +18,7 @@ const SUPPORTED = new Set([".jpg", ".jpeg", ".png", ".webp", ".avif"]);
 const SPECIAL = ["main-page", "main-page2"] as const;
 type SpecialName = (typeof SPECIAL)[number];
 /** Service graphics that must never appear in the gallery. */
-const SERVICE = /^(logo|favicon|icon|og|og-image|apple-touch-icon)([-_.].*)?$/i;
+const SERVICE = /^(logo|favicon|icon|og|og-image|apple-touch-icon)([-_.].*)?$|-poster$/i;
 const EXTENSION_PRIORITY = [".avif", ".webp", ".jpg", ".jpeg", ".png"];
 
 const collator = new Intl.Collator("en", { numeric: true, sensitivity: "base" });
@@ -99,4 +99,55 @@ export function getGalleryImages(): SiteImage[] {
     result.push(strip(image));
   }
   return result;
+}
+
+export type SiteVideo = {
+  src: string;
+  type: string;
+  /** Optional still frame: a `<name>-poster.*` image next to the video. */
+  poster: SiteImage | null;
+};
+
+const VIDEO_TYPES: Record<string, string> = {
+  ".mp4": "video/mp4",
+  ".m4v": "video/mp4",
+  ".webm": "video/webm",
+  ".mov": "video/quicktime",
+  ".ogv": "video/ogg",
+};
+const VIDEO_PRIORITY = [".webm", ".mp4", ".m4v", ".mov", ".ogv"];
+
+/**
+ * Finds a video by base name (e.g. `main-page2.mp4`) in public/images, then public/.
+ * Prefers browser-friendly formats when several exist.
+ */
+export function getSpecialVideo(name: "main-page2"): SiteVideo | null {
+  for (const dir of [IMAGES_DIR, PUBLIC_DIR]) {
+    let files: string[] = [];
+    try {
+      files = fs.readdirSync(dir).filter((file) => !file.startsWith("."));
+    } catch {
+      continue;
+    }
+    const video = files
+      .filter((file) => baseName(file).toLowerCase() === name && path.extname(file).toLowerCase() in VIDEO_TYPES)
+      .sort(
+        (a, b) =>
+          VIDEO_PRIORITY.indexOf(path.extname(a).toLowerCase()) - VIDEO_PRIORITY.indexOf(path.extname(b).toLowerCase()),
+      )[0];
+    if (!video) continue;
+
+    const posterFile = files.find(
+      (file) =>
+        baseName(file).toLowerCase() === `${name}-poster` && SUPPORTED.has(path.extname(file).toLowerCase()),
+    );
+    const poster = posterFile ? readImage(dir, posterFile) : null;
+    const urlDir = path.relative(PUBLIC_DIR, dir).split(path.sep).filter(Boolean).join("/");
+    return {
+      src: `/${urlDir ? `${urlDir}/` : ""}${encodeURIComponent(video)}`,
+      type: VIDEO_TYPES[path.extname(video).toLowerCase()],
+      poster: poster ? strip(poster) : null,
+    };
+  }
+  return null;
 }

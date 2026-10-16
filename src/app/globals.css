@@ -22,6 +22,7 @@
 
   --radius-blob-1: 58% 42% 52% 48% / 46% 54% 46% 54%;
   --radius-blob-2: 42% 58% 38% 62% / 55% 40% 60% 45%;
+  --radius-soft: 2rem 4.5rem 2.25rem 4rem;
 
   --animate-float: float 7s ease-in-out infinite;
   --animate-float-slow: float 11s ease-in-out infinite;
@@ -29,6 +30,7 @@
   --animate-spin-slow: spin 40s linear infinite;
   --animate-twinkle: twinkle 3.6s ease-in-out infinite;
   --animate-morph: morph 14s ease-in-out infinite;
+  --animate-morph-soft: morph-soft 16s ease-in-out infinite;
 
   @keyframes float {
     0%, 100% { transform: translateY(0); }
@@ -41,6 +43,10 @@
   @keyframes twinkle {
     0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
     50% { transform: scale(0.72) rotate(18deg); opacity: 0.65; }
+  }
+  @keyframes morph-soft {
+    0%, 100% { border-radius: 2rem 4.5rem 2.25rem 4rem; }
+    50% { border-radius: 4rem 2.25rem 4.5rem 2rem; }
   }
   @keyframes morph {
     0%, 100% { border-radius: 58% 42% 52% 48% / 46% 54% 46% 54%; }

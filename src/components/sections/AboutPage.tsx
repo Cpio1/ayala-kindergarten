@@ -4,19 +4,19 @@ import Link from "next/link";
 import { motion } from "motion/react";
 import { ChevronRight, HeartHandshake, MessageCircleHeart, Palette, ShieldCheck, Sprout, type LucideIcon } from "lucide-react";
 import { AboutStats } from "./AboutSection";
-import { OrganicPhoto } from "../OrganicPhoto";
+import { AboutMedia } from "./AboutMedia";
 import { Reveal } from "../Reveal";
 import { SectionHeading } from "../SectionHeading";
-import { Cloud, Squiggle, Star, Sun, Swoosh } from "../decor/Decor";
+import { Cloud, Sun, Swoosh } from "../decor/Decor";
 import { InstagramIcon, WhatsappIcon } from "../BrandIcons";
 import { site, whatsappLink } from "@/config/site";
 import { useLanguage } from "@/i18n/LanguageProvider";
-import type { SiteImage } from "@/lib/images";
+import type { SiteImage, SiteVideo } from "@/lib/images";
 import { cn } from "@/lib/cn";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
-export function AboutHero({ image }: { image: SiteImage | null }) {
+export function AboutHero({ video, image }: { video: SiteVideo | null; image: SiteImage | null }) {
   const { t } = useLanguage();
   const p = t.aboutPage;
   return (
@@ -83,32 +83,13 @@ export function AboutHero({ image }: { image: SiteImage | null }) {
           </motion.div>
         </div>
 
-        <div className="relative mx-auto w-full max-w-[24rem] sm:max-w-[28rem] lg:max-w-none">
-          <motion.div
-            className="relative mx-auto aspect-[5/6] w-[84%]"
-            initial={{ opacity: 0, scale: 0.92 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, delay: 0.1, ease }}
-          >
-            <div
-              aria-hidden="true"
-              className="absolute inset-0 translate-x-[6%] -translate-y-[4%] bg-brand"
-              style={{ borderRadius: "var(--radius-blob-2)" }}
-            />
-            <OrganicPhoto
-              image={image}
-              alt={t.about.photoAlt}
-              priority
-              morph
-              sizes="(min-width: 1024px) 34vw, (min-width: 640px) 24rem, 84vw"
-              className="absolute inset-0"
-            />
-            <Sun className="absolute -top-[10%] -left-[12%] w-[30%]" />
-            <Cloud className="absolute -right-[16%] bottom-[18%] w-[32%] animate-float-slow text-white drop-shadow-[0_8px_16px_rgba(32,116,237,0.15)]" />
-            <Star className="absolute top-[6%] -right-[6%] h-6 w-6 animate-twinkle text-sun-dark" />
-            <Squiggle className="absolute -bottom-[5%] left-[8%] w-[34%] text-sun-dark" />
-          </motion.div>
-        </div>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.94 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, delay: 0.1, ease }}
+        >
+          <AboutMedia video={video} image={image} alt={t.about.photoAlt} priority backing="bg-brand" />
+        </motion.div>
       </div>
     </section>
   );
