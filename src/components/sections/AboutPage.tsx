@@ -1,0 +1,198 @@
+"use client";
+
+import Link from "next/link";
+import { motion } from "motion/react";
+import { ChevronRight, HeartHandshake, MessageCircleHeart, Palette, ShieldCheck, Sprout, type LucideIcon } from "lucide-react";
+import { AboutStats } from "./AboutSection";
+import { OrganicPhoto } from "../OrganicPhoto";
+import { Reveal } from "../Reveal";
+import { SectionHeading } from "../SectionHeading";
+import { Cloud, Squiggle, Star, Sun, Swoosh } from "../decor/Decor";
+import { InstagramIcon, WhatsappIcon } from "../BrandIcons";
+import { site, whatsappLink } from "@/config/site";
+import { useLanguage } from "@/i18n/LanguageProvider";
+import type { SiteImage } from "@/lib/images";
+import { cn } from "@/lib/cn";
+
+const ease = [0.22, 1, 0.36, 1] as const;
+
+export function AboutHero({ image }: { image: SiteImage | null }) {
+  const { t } = useLanguage();
+  const p = t.aboutPage;
+  return (
+    <section aria-labelledby="about-page-title" className="relative overflow-hidden pt-28 pb-14 sm:pt-32 lg:pt-36 lg:pb-20">
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute -top-40 -left-40 h-[30rem] w-[30rem] rounded-full bg-sky/50 blur-3xl" />
+        <div className="absolute -right-40 bottom-0 h-[26rem] w-[26rem] rounded-full bg-sun-soft blur-3xl" />
+      </div>
+      <div className="container-page grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
+        <div className="text-center lg:text-left">
+          <motion.nav
+            aria-label="breadcrumb"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease }}
+          >
+            <ol className="inline-flex items-center gap-1.5 rounded-full bg-white px-4 py-1.5 text-sm font-bold text-ink-soft shadow-soft">
+              <li>
+                <Link href="/" className="hover:text-brand">
+                  {t.nav.home}
+                </Link>
+              </li>
+              <li aria-hidden="true">
+                <ChevronRight className="h-4 w-4" />
+              </li>
+              <li aria-current="page" className="text-brand">
+                {p.breadcrumb}
+              </li>
+            </ol>
+          </motion.nav>
+          <motion.h1
+            id="about-page-title"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.75, delay: 0.1, ease }}
+            className="mt-6 text-[2rem] leading-tight font-semibold text-ink sm:text-[2.6rem] lg:text-[3rem]"
+          >
+            <span className="relative inline-block">
+              {p.title}
+              <Swoosh className="absolute -bottom-2 left-0 -z-10 h-4 w-full text-sun" />
+            </span>
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.75, delay: 0.2, ease }}
+            className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-ink-soft sm:text-lg lg:mx-0"
+          >
+            {p.intro}
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.75, delay: 0.3, ease }}
+            className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center lg:justify-start"
+          >
+            <Link href="/#contacts" className="btn btn-primary">
+              <MessageCircleHeart className="h-5 w-5" aria-hidden="true" />
+              {t.hero.ctaContact}
+            </Link>
+            <Link href="/#groups" className="btn btn-ghost">
+              {t.groups.title}
+            </Link>
+          </motion.div>
+        </div>
+
+        <div className="relative mx-auto w-full max-w-[24rem] sm:max-w-[28rem] lg:max-w-none">
+          <motion.div
+            className="relative mx-auto aspect-[5/6] w-[84%]"
+            initial={{ opacity: 0, scale: 0.92 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, delay: 0.1, ease }}
+          >
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 translate-x-[6%] -translate-y-[4%] bg-brand"
+              style={{ borderRadius: "var(--radius-blob-2)" }}
+            />
+            <OrganicPhoto
+              image={image}
+              alt={t.about.photoAlt}
+              priority
+              morph
+              sizes="(min-width: 1024px) 34vw, (min-width: 640px) 24rem, 84vw"
+              className="absolute inset-0"
+            />
+            <Sun className="absolute -top-[10%] -left-[12%] w-[30%]" />
+            <Cloud className="absolute -right-[16%] bottom-[18%] w-[32%] animate-float-slow text-white drop-shadow-[0_8px_16px_rgba(32,116,237,0.15)]" />
+            <Star className="absolute top-[6%] -right-[6%] h-6 w-6 animate-twinkle text-sun-dark" />
+            <Squiggle className="absolute -bottom-[5%] left-[8%] w-[34%] text-sun-dark" />
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+const VALUE_ICONS: LucideIcon[] = [ShieldCheck, Palette, Sprout, HeartHandshake];
+const VALUE_TONES = ["bg-brand text-white", "bg-sun text-ink", "bg-sky text-brand-deep", "bg-white text-brand"];
+
+export function AboutValues() {
+  const { t } = useLanguage();
+  const p = t.aboutPage;
+  return (
+    <section aria-labelledby="values-title" className="relative py-14 sm:py-20">
+      <div className="container-page">
+        <SectionHeading id="values-title" eyebrow={p.valuesEyebrow} title={p.valuesTitle} />
+        <ol className="mt-12 grid gap-5 md:grid-cols-2">
+          {t.about.paragraphs.map((text, i) => {
+            const Icon = VALUE_ICONS[i];
+            return (
+              <Reveal as="li" key={i} delay={(i % 2) * 0.08}>
+                <article
+                  className="group relative flex h-full gap-5 overflow-hidden bg-white p-6 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-lift sm:p-7"
+                  style={{ borderRadius: i % 2 ? "0.8rem 2.25rem 2.25rem 2.25rem" : "2.25rem 2.25rem 2.25rem 0.8rem" }}
+                >
+                  <span
+                    aria-hidden="true"
+                    className="absolute -right-3 -bottom-8 font-display text-[6rem] leading-none font-bold text-sky-soft transition-transform duration-500 group-hover:-translate-y-2"
+                  >
+                    {i + 1}
+                  </span>
+                  <span
+                    className={cn("relative grid h-14 w-14 shrink-0 place-items-center shadow-soft", VALUE_TONES[i])}
+                    style={{ borderRadius: "var(--radius-blob-1)" }}
+                  >
+                    <Icon className="h-7 w-7" aria-hidden="true" />
+                  </span>
+                  <div className="relative">
+                    <h3 className="text-lg font-semibold text-ink">{p.values[i]}</h3>
+                    <p className="mt-2 leading-relaxed text-ink-soft">{text}</p>
+                  </div>
+                </article>
+              </Reveal>
+            );
+          })}
+        </ol>
+        <AboutStats className="mt-10" />
+      </div>
+    </section>
+  );
+}
+
+export function AboutCta() {
+  const { t } = useLanguage();
+  const p = t.aboutPage;
+  return (
+    <section aria-labelledby="about-cta-title" className="py-12 sm:py-16">
+      <div className="container-page">
+        <Reveal>
+          <div className="relative overflow-hidden rounded-[2.75rem_2.75rem_2.75rem_1rem] bg-brand px-6 py-12 text-center text-white shadow-lift sm:px-12">
+            <Sun className="pointer-events-none absolute -top-10 -right-10 w-40 opacity-90" />
+            <Cloud className="pointer-events-none absolute bottom-4 -left-6 w-32 animate-float-slow text-white/15" />
+            <h2 id="about-cta-title" className="relative text-2xl font-semibold sm:text-3xl">
+              {p.ctaTitle}
+            </h2>
+            <p className="relative mx-auto mt-4 max-w-xl text-sky-soft sm:text-lg">{p.ctaText}</p>
+            <div className="relative mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+              <Link href="/#contacts" className="btn btn-sun">
+                <MessageCircleHeart className="h-5 w-5" aria-hidden="true" />
+                {p.ctaButton}
+              </Link>
+              <a href={whatsappLink()} target="_blank" rel="noopener noreferrer" className="btn bg-white text-brand hover:bg-sky-soft">
+                <WhatsappIcon className="h-5 w-5" />
+                {t.common.whatsapp}
+                <span className="sr-only">({t.a11y.newTab})</span>
+              </a>
+              <a href={site.instagram.url} target="_blank" rel="noopener noreferrer" className="btn bg-white/10 text-white hover:bg-white/20">
+                <InstagramIcon className="h-5 w-5" />
+                {site.instagram.handle}
+                <span className="sr-only">({t.a11y.newTab})</span>
+              </a>
+            </div>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
