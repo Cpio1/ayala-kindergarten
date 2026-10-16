@@ -86,3 +86,48 @@ export function GymnasticsIcon({ className }: P) {
     </Svg>
   );
 }
+
+export function RoboticsIcon({ className }: P) {
+  return (
+    <Svg className={className}>
+      <path d="M32 6v7" stroke={I} strokeWidth="3" strokeLinecap="round" />
+      <circle cx="32" cy="6" r="3.5" fill={Y} />
+      <rect x="14" y="13" width="36" height="25" rx="9" fill={B} />
+      <rect x="9" y="21" width="5" height="10" rx="2.5" fill={I} />
+      <rect x="50" y="21" width="5" height="10" rx="2.5" fill={I} />
+      <rect x="19" y="18" width="26" height="15" rx="6" fill="#fff" />
+      <circle cx="26" cy="25.5" r="3.2" fill={B} />
+      <circle cx="38" cy="25.5" r="3.2" fill={B} />
+      <path d="M29 30.5c2 1.4 4 1.4 6 0" stroke={B} strokeWidth="2" strokeLinecap="round" />
+      <rect x="18" y="41" width="28" height="17" rx="6" fill={Y} />
+      <circle cx="26" cy="49.5" r="3" fill={B} />
+      <rect x="32" y="46" width="9" height="3" rx="1.5" fill={I} />
+      <rect x="32" y="51" width="6" height="3" rx="1.5" fill={I} />
+      <path d="M18 46h-5a3 3 0 0 0-3 3v4M46 46h5a3 3 0 0 1 3 3v4" stroke={B} strokeWidth="4" strokeLinecap="round" />
+      <path d="M54 6l1.6 3.2 3.4 1.6-3.4 1.6L54 15.6l-1.6-3.2L49 10.8l3.4-1.6z" fill={Y} />
+    </Svg>
+  );
+}
+
+export function ChessIcon({ className }: P) {
+  return (
+    <Svg className={className}>
+      {/* small board in the back */}
+      <clipPath id="chess-board-clip">
+        <rect x="30" y="30" width="28" height="28" rx="6" />
+      </clipPath>
+      <g clipPath="url(#chess-board-clip)">
+        <rect x="30" y="30" width="28" height="28" fill={Y} />
+        <path d="M37 30h7v7h-7zM51 30h7v7h-7zM30 37h7v7h-7zM44 37h7v7h-7zM37 44h7v7h-7zM51 44h7v7h-7zM30 51h7v7h-7zM44 51h7v7h-7z" fill="#fff" opacity="0.8" />
+      </g>
+      {/* knight */}
+      <path
+        d="M14 54h22l-2-6H16zM17 48h15c0-8-2-13-4-17 3-1 5-4 4-8l-7-6c-2-2-5-2-7 0l-1 3-3 2c-2 2-2 4 0 6l4 1c2 0 3-1 4-2 0 7-5 11-5 21z"
+        fill={B}
+      />
+      <circle cx="20.5" cy="22" r="1.8" fill="#fff" />
+      <rect x="12" y="53" width="26" height="5" rx="2.5" fill={I} />
+      <path d="M50 8l2 4 4 2-4 2-2 4-2-4-4-2 4-2z" fill={B} />
+    </Svg>
+  );
+}

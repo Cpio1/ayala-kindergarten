@@ -56,8 +56,8 @@ export const site = {
 
   hours: {
     opens: "07:10",
-    closes: "18:00",
-    display: "07:10–18:00",
+    closes: "18:10",
+    display: "07:10–18:10",
     /** schema.org day names for JSON-LD */
     days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
   },

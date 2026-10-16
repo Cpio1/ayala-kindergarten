@@ -4,18 +4,30 @@ import { Reveal } from "../Reveal";
 import { SectionHeading } from "../SectionHeading";
 import { Dots, Squiggle } from "../decor/Decor";
 import {
+  ChessIcon,
   DanceIcon,
   EnglishIcon,
   GymnasticsIcon,
   MusicIcon,
+  RoboticsIcon,
   SpeechIcon,
   TaekwondoIcon,
 } from "../illustrations/ClassIcons";
 import { useLanguage } from "@/i18n/LanguageProvider";
 import { cn } from "@/lib/cn";
 
-const ICONS = [EnglishIcon, SpeechIcon, MusicIcon, DanceIcon, TaekwondoIcon, GymnasticsIcon];
-const BACKS = ["bg-sky-soft", "bg-sun-soft", "bg-sky-soft", "bg-sun-soft", "bg-sky-soft", "bg-sun-soft"];
+const ICONS = [
+  EnglishIcon,
+  SpeechIcon,
+  MusicIcon,
+  DanceIcon,
+  TaekwondoIcon,
+  GymnasticsIcon,
+  RoboticsIcon,
+  ChessIcon,
+];
+// Checkerboard of tints that stays balanced in both the 2- and 4-column grids.
+const BACKS = ["bg-sky-soft", "bg-sun-soft", "bg-sky-soft", "bg-sun-soft", "bg-sun-soft", "bg-sky-soft", "bg-sun-soft", "bg-sky-soft"];
 
 export function Classes() {
   const { t } = useLanguage();
@@ -28,12 +40,15 @@ export function Classes() {
       <div className="container-page relative">
         <SectionHeading id="classes-title" eyebrow={c.eyebrow} title={c.title} subtitle={c.subtitle} />
 
-        <ul className="mt-12 grid gap-5 sm:grid-cols-2 lg:mt-14 lg:grid-cols-3 lg:gap-6">
+        <ul className="mt-12 grid auto-rows-fr gap-4 min-[460px]:grid-cols-2 sm:gap-5 lg:mt-14 lg:grid-cols-4 xl:gap-6">
           {c.items.map((item, i) => {
             const Icon = ICONS[i];
             return (
-              <Reveal as="li" key={i} delay={(i % 3) * 0.08}>
-                <article className="group relative flex h-full items-start gap-5 rounded-[2rem] bg-white p-5 shadow-soft ring-1 ring-brand/5 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lift hover:ring-brand/20 sm:p-6">
+              <Reveal as="li" key={i} delay={(i % 4) * 0.08}>
+                <article
+                  className="group relative flex h-full flex-col items-start gap-4 bg-white p-5 shadow-soft ring-1 ring-brand/5 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lift hover:ring-brand/20 sm:p-6"
+                  style={{ borderRadius: i % 2 ? "2rem 2rem 2rem 0.75rem" : "2rem 0.75rem 2rem 2rem" }}
+                >
                   <span
                     className={cn(
                       "relative grid h-[4.5rem] w-[4.5rem] shrink-0 place-items-center transition-[border-radius,transform] duration-500 group-hover:scale-105",
