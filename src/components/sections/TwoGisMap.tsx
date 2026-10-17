@@ -20,15 +20,24 @@ export function TwoGisMap() {
   const frameRef = useRef<HTMLDivElement>(null);
   const [load, setLoad] = useState(false);
   const [loaded, setLoaded] = useState(false);
+  // On touch screens the map ignores gestures until tapped, so a swipe over it scrolls the page.
+  const [active, setActive] = useState(false);
 
-  // The widget is heavy — mount the iframe only when the map is close to the viewport.
+  // The widget is heavy — mount the iframe only when the map is close to the viewport, once.
   useEffect(() => {
     const node = frameRef.current;
-    if (!node || !widget) return;
-    const io = new IntersectionObserver(([entry]) => entry.isIntersecting && setLoad(true), { rootMargin: "300px 0px" });
+    if (!node || !widget || load) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        io.disconnect();
+        setLoad(true);
+      },
+      { rootMargin: "400px 0px" },
+    );
     io.observe(node);
     return () => io.disconnect();
-  }, [widget]);
+  }, [widget, load]);
 
   return (
     <div className="relative">
@@ -79,6 +88,17 @@ export function TwoGisMap() {
                   style={{ opacity: loaded ? 1 : 0 }}
                   allow="geolocation"
                 />
+              )}
+              {loaded && !active && (
+                <button
+                  type="button"
+                  onClick={() => setActive(true)}
+                  className="absolute inset-0 hidden items-end justify-center bg-transparent pb-4 pointer-coarse:flex"
+                >
+                  <span className="rounded-full bg-white/95 px-4 py-2 text-sm font-extrabold text-brand shadow-soft">
+                    {m.activate}
+                  </span>
+                </button>
               )}
             </>
           ) : (

@@ -1,7 +1,6 @@
 "use client";
 
 import { Apple, Carrot, Cherry, CheckCircle2, Fish, Milk, Salad, Soup, Wheat, type LucideIcon } from "lucide-react";
-import { motion } from "motion/react";
 import { Reveal } from "../Reveal";
 import { SectionHeading } from "../SectionHeading";
 import { Star, WaveEdge } from "../decor/Decor";
@@ -64,30 +63,23 @@ export function Nutrition() {
               </div>
             </div>
 
-            {/* foods */}
-            <motion.div
-              aria-hidden="true"
-              className="absolute inset-0"
-              animate={{ rotate: 360 }}
-              transition={{ duration: 80, repeat: Infinity, ease: "linear" }}
-            >
+            {/* foods on a slow CSS orbit (compositor-only); still on phones */}
+            <div aria-hidden="true" className="absolute inset-0 animate-orbit">
               {FOODS.map(([Icon, angle, tone], i) => {
                 const rad = (angle * Math.PI) / 180;
                 const x = 50 + 40 * Math.cos(rad);
                 const y = 50 + 40 * Math.sin(rad);
                 return (
-                  <motion.span
+                  <span
                     key={i}
-                    className={`absolute grid h-12 w-12 -translate-x-1/2 -translate-y-1/2 place-items-center shadow-soft sm:h-14 sm:w-14 ${tone}`}
+                    className={`absolute grid h-12 w-12 -translate-x-1/2 -translate-y-1/2 place-items-center shadow-soft animate-orbit-reverse sm:h-14 sm:w-14 ${tone}`}
                     style={{ left: `${x}%`, top: `${y}%`, borderRadius: i % 2 ? "var(--radius-blob-2)" : "var(--radius-blob-1)" }}
-                    animate={{ rotate: -360 }}
-                    transition={{ duration: 80, repeat: Infinity, ease: "linear" }}
                   >
                     <Icon className="h-6 w-6 sm:h-7 sm:w-7" />
-                  </motion.span>
+                  </span>
                 );
               })}
-            </motion.div>
+            </div>
 
             <span className="absolute top-[6%] right-[4%] grid h-11 w-11 animate-float place-items-center rounded-full bg-sun text-ink shadow-sun" aria-hidden="true">
               <Soup className="h-5 w-5" />

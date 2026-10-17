@@ -1,12 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { AnimatePresence, motion } from "motion/react";
 import { ChevronDown, ChevronUp, ImageIcon, Maximize2 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useSyncExternalStore } from "react";
 import { Lightbox } from "./Lightbox";
-import { distribute, RADII, type Placed } from "./layout";
+import { distribute, RADII } from "./layout";
 import { InstagramIcon } from "../InstagramIcon";
+import { Reveal } from "../Reveal";
 import { SectionHeading } from "../SectionHeading";
 import { Cloud, Star } from "../decor/Decor";
 import { site } from "@/config/site";
@@ -15,62 +15,36 @@ import type { SiteImage } from "@/lib/images";
 import { cn } from "@/lib/cn";
 
 const INITIAL = 5;
+const WIDE = "(min-width: 1024px)";
+
+function subscribeWide(onChange: () => void) {
+  const mql = window.matchMedia(WIDE);
+  mql.addEventListener("change", onChange);
+  return () => mql.removeEventListener("change", onChange);
+}
+
+/**
+ * 2 columns on phones/tablets, 3 on desktop. Server and first client render use 2;
+ * the gallery sits far below the first screen, so the desktop switch never shifts visible content.
+ */
+function useColumnCount() {
+  return useSyncExternalStore(
+    subscribeWide,
+    () => (window.matchMedia(WIDE).matches ? 3 : 2),
+    () => 2,
+  );
+}
 
 export function Gallery({ images }: { images: SiteImage[] }) {
   const { t } = useLanguage();
   const g = t.gallery;
   const [expanded, setExpanded] = useState(false);
   const [active, setActive] = useState<number | null>(null);
+  const columnCount = useColumnCount();
 
+  // Photos past the first INITIAL are not rendered (and not downloaded) until «Тағы көрсету».
   const visible = useMemo(() => (expanded ? images : images.slice(0, INITIAL)), [expanded, images]);
-  // Two layouts rendered with CSS breakpoints: no hydration mismatch, no layout jump.
-  const layouts = useMemo(() => ({ two: distribute(visible, 2), three: distribute(visible, 3) }), [visible]);
-
-  const renderColumns = (cols: Placed[][]) =>
-    cols.map((col, c) => (
-      <div key={c} className="flex min-w-0 flex-1 flex-col gap-3 sm:gap-5">
-        <AnimatePresence initial={false}>
-          {col.map(({ image, index }) => (
-            <motion.div
-              key={image.src}
-              layout="position"
-              initial={{ opacity: 0, y: 30, scale: 0.97 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true, amount: 0.15 }}
-              exit={{ opacity: 0, scale: 0.97 }}
-              transition={{
-                duration: 0.6,
-                delay: index >= INITIAL ? (index - INITIAL) * 0.05 : (index % 3) * 0.08,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-            >
-              <button
-                type="button"
-                onClick={() => setActive(index)}
-                aria-label={`${g.open}: ${index + 1}`}
-                className="group relative block w-full overflow-hidden bg-sky-soft shadow-soft"
-                style={{
-                  borderRadius: RADII[index % RADII.length],
-                  aspectRatio: `${image.width} / ${image.height}`,
-                }}
-              >
-                <Image
-                  src={image.src}
-                  alt={`${g.photoAlt} ${index + 1}`}
-                  fill
-                  sizes="(min-width: 1024px) 24rem, 50vw"
-                  className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
-                />
-                <span className="absolute inset-0 bg-gradient-to-t from-brand-deep/40 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                <span className="absolute right-3 bottom-3 grid h-10 w-10 translate-y-2 place-items-center rounded-full bg-white text-brand opacity-0 shadow-soft transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:opacity-100">
-                  <Maximize2 className="h-4 w-4" aria-hidden="true" />
-                </span>
-              </button>
-            </motion.div>
-          ))}
-        </AnimatePresence>
-      </div>
-    ));
+  const columns = useMemo(() => distribute(visible, columnCount), [visible, columnCount]);
 
   return (
     <section id="gallery" aria-labelledby="gallery-title" className="relative overflow-hidden py-16 sm:py-24">
@@ -94,8 +68,45 @@ export function Gallery({ images }: { images: SiteImage[] }) {
           </div>
         ) : (
           <>
-            <div className="mt-12 flex items-start gap-3 sm:gap-5 lg:hidden">{renderColumns(layouts.two)}</div>
-            <div className="mt-14 hidden items-start gap-5 lg:flex">{renderColumns(layouts.three)}</div>
+            {/* one reveal for the whole grid instead of an animation per photo */}
+            <Reveal className="mt-12 flex items-start gap-3 sm:gap-5 lg:mt-14">
+              {columns.map((col, c) => (
+                <div key={c} className="flex min-w-0 flex-1 flex-col gap-3 sm:gap-5">
+                  {col.map(({ image, index }) => (
+                    <button
+                      key={image.src}
+                      type="button"
+                      onClick={() => setActive(index)}
+                      aria-label={`${g.open}: ${index + 1}`}
+                      className={cn(
+                        "group relative block w-full overflow-hidden bg-sky-soft shadow-soft",
+                        index >= INITIAL && "gallery-in",
+                      )}
+                      style={
+                        {
+                          borderRadius: RADII[index % RADII.length],
+                          aspectRatio: `${image.width} / ${image.height}`,
+                          "--delay": `${Math.max(0, index - INITIAL) * 0.04}s`,
+                        } as React.CSSProperties
+                      }
+                    >
+                      <Image
+                        src={image.src}
+                        alt={`${g.photoAlt} ${index + 1}`}
+                        fill
+                        loading="lazy"
+                        sizes="(min-width: 1216px) 23rem, (min-width: 1024px) calc((100vw - 6.5rem) / 3), (min-width: 640px) calc(50vw - 2.5rem), calc(50vw - 1.4rem)"
+                        className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                      />
+                      <span className="absolute inset-0 bg-gradient-to-t from-brand-deep/40 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                      <span className="absolute right-3 bottom-3 grid h-10 w-10 translate-y-2 place-items-center rounded-full bg-white text-brand opacity-0 shadow-soft transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:opacity-100">
+                        <Maximize2 className="h-4 w-4" aria-hidden="true" />
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              ))}
+            </Reveal>
 
             {images.length > INITIAL && (
               <div className="mt-10 text-center">

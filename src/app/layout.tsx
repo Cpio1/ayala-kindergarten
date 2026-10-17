@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Nunito, Unbounded } from "next/font/google";
 import { Providers } from "@/components/Providers";
+import { SkipLink } from "@/components/SkipLink";
 import { site } from "@/config/site";
 import { dictionaries } from "@/i18n/translations";
 import { getSpecialImage } from "@/lib/images";
@@ -75,7 +76,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
         />
-        <Providers>{children}</Providers>
+        <Providers>
+          <SkipLink />
+          {children}
+        </Providers>
       </body>
     </html>
   );

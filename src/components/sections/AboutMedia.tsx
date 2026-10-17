@@ -29,7 +29,12 @@ export function AboutMedia({ video, image, alt, priority, backing }: Props) {
           style={{ borderRadius: "var(--radius-blob-2)" }}
         />
         {video ? (
-          <VideoPlayer video={video} className="relative" style={{ borderRadius: "2.5rem 4rem 2.5rem 3.25rem" }} />
+          <VideoPlayer
+            video={video}
+            priority={priority}
+            className="relative"
+            style={{ borderRadius: "2.5rem 4rem 2.5rem 3.25rem" }}
+          />
         ) : (
           <OrganicPhoto
             image={image}
@@ -40,7 +45,7 @@ export function AboutMedia({ video, image, alt, priority, backing }: Props) {
           />
         )}
         <Sun className="pointer-events-none absolute -top-[9%] -left-[22%] w-[38%]" />
-        <Cloud className="pointer-events-none absolute -right-[26%] bottom-[24%] w-[40%] animate-float-slow text-white drop-shadow-[0_8px_16px_rgba(32,116,237,0.15)]" />
+        <Cloud className="pointer-events-none absolute -right-[26%] bottom-[24%] w-[40%] animate-float-slow text-white lg:drop-shadow-[0_8px_16px_rgba(32,116,237,0.15)]" />
         <Star className="pointer-events-none absolute top-[4%] -right-[12%] h-6 w-6 animate-twinkle text-sun-dark" />
         <Star className="pointer-events-none absolute bottom-[10%] -left-[14%] h-4 w-4 animate-twinkle text-brand [animation-delay:1s]" />
         <Squiggle className="pointer-events-none absolute -bottom-[7%] left-[18%] w-[46%] text-sun-dark" />

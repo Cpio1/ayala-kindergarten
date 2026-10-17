@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "motion/react";
 import { ChevronRight, HeartHandshake, MessageCircleHeart, Palette, ShieldCheck, Sprout, type LucideIcon } from "lucide-react";
 import { AboutStats } from "./AboutSection";
 import { AboutMedia } from "./AboutMedia";
@@ -14,25 +13,18 @@ import { useLanguage } from "@/i18n/LanguageProvider";
 import type { SiteImage, SiteVideo } from "@/lib/images";
 import { cn } from "@/lib/cn";
 
-const ease = [0.22, 1, 0.36, 1] as const;
-
 export function AboutHero({ video, image }: { video: SiteVideo | null; image: SiteImage | null }) {
   const { t } = useLanguage();
   const p = t.aboutPage;
   return (
     <section aria-labelledby="about-page-title" className="relative overflow-hidden pt-28 pb-14 sm:pt-32 lg:pt-36 lg:pb-20">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute -top-40 -left-40 h-[30rem] w-[30rem] rounded-full bg-sky/50 blur-3xl" />
-        <div className="absolute -right-40 bottom-0 h-[26rem] w-[26rem] rounded-full bg-sun-soft blur-3xl" />
+        <div className="absolute -top-56 -left-56 h-[42rem] w-[42rem] bg-[radial-gradient(closest-side,rgb(168_221_248/0.5),transparent)]" />
+        <div className="absolute -right-56 -bottom-16 h-[38rem] w-[38rem] bg-[radial-gradient(closest-side,var(--color-sun-soft),transparent)]" />
       </div>
       <div className="container-page grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
         <div className="text-center lg:text-left">
-          <motion.nav
-            aria-label="breadcrumb"
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease }}
-          >
+          <nav aria-label="breadcrumb" className="enter-rise">
             <ol className="inline-flex items-center gap-1.5 rounded-full bg-white px-4 py-1.5 text-sm font-bold text-ink-soft shadow-soft">
               <li>
                 <Link href="/" className="hover:text-brand">
@@ -46,32 +38,26 @@ export function AboutHero({ video, image }: { video: SiteVideo | null; image: Si
                 {p.breadcrumb}
               </li>
             </ol>
-          </motion.nav>
-          <motion.h1
+          </nav>
+          <h1
             id="about-page-title"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.75, delay: 0.1, ease }}
-            className="mt-6 text-[2rem] leading-tight font-semibold text-ink sm:text-[2.6rem] lg:text-[3rem]"
+            style={{ "--delay": "0.08s" } as React.CSSProperties}
+            className="enter-rise mt-6 text-[2rem] leading-tight font-semibold text-ink sm:text-[2.6rem] lg:text-[3rem]"
           >
             <span className="relative inline-block">
               {p.title}
               <Swoosh className="absolute -bottom-2 left-0 -z-10 h-4 w-full text-sun" />
             </span>
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.75, delay: 0.2, ease }}
-            className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-ink-soft sm:text-lg lg:mx-0"
+          </h1>
+          <p
+            style={{ "--delay": "0.16s" } as React.CSSProperties}
+            className="enter-rise mx-auto mt-6 max-w-xl text-base leading-relaxed text-ink-soft sm:text-lg lg:mx-0"
           >
             {p.intro}
-          </motion.p>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.75, delay: 0.3, ease }}
-            className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center lg:justify-start"
+          </p>
+          <div
+            style={{ "--delay": "0.24s" } as React.CSSProperties}
+            className="enter-rise mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center lg:justify-start"
           >
             <Link href="/#contacts" className="btn btn-primary">
               <MessageCircleHeart className="h-5 w-5" aria-hidden="true" />
@@ -80,16 +66,12 @@ export function AboutHero({ video, image }: { video: SiteVideo | null; image: Si
             <Link href="/#groups" className="btn btn-ghost">
               {t.groups.title}
             </Link>
-          </motion.div>
+          </div>
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, scale: 0.94 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, delay: 0.1, ease }}
-        >
+        <div className="enter-grow">
           <AboutMedia video={video} image={image} alt={t.about.photoAlt} priority backing="bg-brand" />
-        </motion.div>
+        </div>
       </div>
     </section>
   );
