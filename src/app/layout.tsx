@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Nunito, Unbounded } from "next/font/google";
+import { Montserrat, Nunito } from "next/font/google";
 import { Providers } from "@/components/Providers";
 import { SkipLink } from "@/components/SkipLink";
 import { site } from "@/config/site";
@@ -8,11 +8,12 @@ import { getSpecialImage } from "@/lib/images";
 import { preschoolJsonLd } from "@/lib/seo";
 import "./globals.css";
 
-// cyrillic-ext covers the Kazakh letters Ә Ғ Қ Ң Ө Ұ Ү Һ І.
-const unbounded = Unbounded({
+// cyrillic-ext covers the Kazakh letters Ә Ғ Қ Ң Ө Ұ Ү Һ І. Both faces ship all of them
+// (Unbounded was dropped: it only has І, so headings fell back to a system font).
+const montserrat = Montserrat({
   subsets: ["latin", "cyrillic", "cyrillic-ext"],
   weight: ["500", "600", "700"],
-  variable: "--font-unbounded",
+  variable: "--font-montserrat",
   display: "swap",
 });
 
@@ -70,7 +71,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const jsonLd = preschoolJsonLd(getSpecialImage("main-page"));
   return (
-    <html lang="kk" className={`${unbounded.variable} ${nunito.variable}`}>
+    <html lang="kk" className={`${montserrat.variable} ${nunito.variable}`}>
       <body>
         <script
           type="application/ld+json"

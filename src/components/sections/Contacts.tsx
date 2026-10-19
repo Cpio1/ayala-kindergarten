@@ -80,7 +80,7 @@ export function Contacts() {
                     {row.icon}
                   </span>
                   <span className="min-w-0 pt-0.5">
-                    <span className="block text-xs font-extrabold tracking-wide text-ink-soft uppercase">{row.label}</span>
+                    <span className="block text-xs font-extrabold tracking-wide text-ink-soft">{row.label}</span>
                     <span className="mt-0.5 block font-bold break-words text-ink">{row.value}</span>
                   </span>
                 </li>

@@ -35,7 +35,7 @@ export function Documents() {
               </div>
 
               <div className="text-center md:text-left">
-                <span className="text-xs font-extrabold tracking-[0.18em] text-ink/60 uppercase">{d.eyebrow}</span>
+                <span className="text-xs font-extrabold tracking-[0.18em] text-ink/60">{d.eyebrow}</span>
                 <h2 id="documents-title" className="mt-2 text-2xl font-semibold text-ink sm:text-3xl">
                   {d.title}
                 </h2>

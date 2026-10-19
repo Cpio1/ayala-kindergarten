@@ -13,7 +13,7 @@
   --color-ink: #20324b;
   --color-ink-soft: #4d5e78;
 
-  --font-display: var(--font-unbounded), ui-rounded, system-ui, sans-serif;
+  --font-display: var(--font-montserrat), ui-rounded, system-ui, sans-serif;
   --font-sans: var(--font-nunito), ui-rounded, system-ui, sans-serif;
 
   --shadow-soft: 0 10px 30px -12px rgb(32 50 75 / 0.18);

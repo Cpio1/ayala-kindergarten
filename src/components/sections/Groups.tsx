@@ -78,7 +78,7 @@ export function Groups() {
                     </div>
 
                     <div className="flex flex-1 flex-col px-4 pt-5 pb-5 sm:px-5">
-                      <span className={cn("self-start rounded-full px-3 py-1 text-xs font-extrabold tracking-wide uppercase", th.label)}>
+                      <span className={cn("self-start rounded-full px-3 py-1 text-xs font-extrabold tracking-wide", th.label)}>
                         {item.label}
                       </span>
                       <h3 className={cn("mt-3 text-2xl font-semibold", dark ? "text-white" : "text-ink")}>{item.name}</h3>

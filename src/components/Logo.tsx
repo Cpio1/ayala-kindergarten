@@ -36,7 +36,7 @@ export function Logo({ variant = "color", className }: { variant?: "color" | "li
       </span>
       <span
         className={cn(
-          "mt-[0.55rem] pl-0.5 text-[0.62rem] font-extrabold tracking-[0.32em] uppercase",
+          "mt-[0.55rem] pl-0.5 text-[0.62rem] font-extrabold tracking-[0.32em]",
           light ? "text-sky" : "text-ink-soft",
         )}
       >
